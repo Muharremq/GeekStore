@@ -14,51 +14,24 @@ class Product {
     required this.imageUrl,
     required this.rating,
   });
+
+  // JSON verisini Product nesnesine çeviren fabrika (factory) metodu
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      // Fiyat bazen int bazen double gelebilir, garantiye alıyoruz:
+      price: (json['price'] as num).toDouble(),
+      imageUrl: json['image'], // API'de resim alanı 'image' olarak geçiyor
+      // Rating, API'de { "rate": 3.9, "count": 120 } şeklinde iç içe obje
+      rating: (json['rating'] != null && json['rating']['rate'] != null)
+          ? (json['rating']['rate'] as num).toDouble()
+          : 0.0,
+    );
+  }
 }
 
-// Görsellerdeki verilere benzer sahte veriler (Resimler internetten çekilecek)
-final List<Product> products = [
-  Product(
-    id: 1,
-    title: "MacBook Pro 16",
-    description:
-        "Güçlü M3 Max işlemci, 32GB RAM ve 1TB SSD ile profesyonel performans.",
-    price: 89999,
-    rating: 4.8,
-    imageUrl:
-        "https://images.unsplash.com/photo-1517336714731-489689fd1ca4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-  ),
-  Product(
-    id: 2,
-    title: "Sony WH-1000XM5",
-    description:
-        "Endüstri lideri gürültü engelleme teknolojisi. 30 saat pil ömrü.",
-    price: 8999,
-    rating: 4.7,
-    imageUrl:
-        "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-  ),
-  Product(
-    id: 3,
-    title: "iPad Air",
-    description:
-        "M1 çip gücüyle yaratıcılığınızı konuşturun. 10.9 inç Liquid Retina ekran.",
-    price: 24999,
-    rating: 4.5,
-    imageUrl:
-        "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-  ),
-  Product(
-    id: 4,
-    title: "Apple Watch Series 9",
-    description:
-        "Daha parlak ekran ve sağlık sensörleri ile hayatınızı takip edin.",
-    price: 14999,
-    rating: 4.6,
-    imageUrl:
-        "https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-  ),
-];
-
-// Basit Sepet Listesi (Global değişken olarak tutuyoruz - Eğitim amaçlı)
+// Eski 'final List<Product> products = [...]' listesini sildik çünkü artık internetten çekeceğiz.
+// Sepet listesi şimdilik boş kalabilir, yine bellekte tutacağız.
 List<Product> cart = [];

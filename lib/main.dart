@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TechStore',
+      title: 'GeekStore',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // İSTEK: Renkleri Purple ve Gray olarak ayarlıyoruz
