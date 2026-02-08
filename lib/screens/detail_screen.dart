@@ -10,13 +10,11 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      extendBodyBehindAppBar: true, // Resim yukarı taşsın diye
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent, // Şeffaf AppBar
         elevation: 0,
-        iconTheme: const IconThemeData(
-          color: Colors.deepPurple,
-        ), // Geri butonu mor
+        iconTheme: const IconThemeData(color: Colors.deepPurple), // Geri butonu
       ),
       body: SingleChildScrollView(
         child: Column(

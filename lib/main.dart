@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'GeekStore',
       debugShowCheckedModeBanner: false,
+      // Uygulama genel tema yapılandırması (Mor & Gri)
       theme: ThemeData(
-        // İSTEK: Renkleri Purple ve Gray olarak ayarlıyoruz
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple, // Ana renk (Butonlar, başlıklar)
+          seedColor: Colors.deepPurple,
           primary: Colors.deepPurple,
-          secondary: Colors.grey, // Yardımcı renk
-          surface: Colors.grey[100], // Arka planın hafif gri tonu
+          secondary: Colors.grey,
+          surface: Colors.grey[100],
         ),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(

@@ -3,24 +3,23 @@ import 'package:http/http.dart' as http;
 import '../models/product.dart';
 
 class ApiService {
-  // FakeStoreAPI'den ürünleri çeken fonksiyon
+  static const String _baseUrl = 'https://fakestoreapi.com/products';
+
+  // Asenkron ürün listesi getirme işlemi
   Future<List<Product>> fetchProducts() async {
-    final response = await http.get(
-      Uri.parse('https://fakestoreapi.com/products'),
-    );
+    try {
+      final response = await http.get(Uri.parse(_baseUrl));
 
-    if (response.statusCode == 200) {
-      // Sunucudan cevap başarılı geldiyse (200 OK)
-      List<dynamic> body = jsonDecode(response.body);
-
-      // JSON listesini Product listesine çevirip döndürüyoruz
-      List<Product> products = body
-          .map((dynamic item) => Product.fromJson(item))
-          .toList();
-      return products;
-    } else {
-      // Hata varsa boş liste veya hata fırlatabiliriz
-      throw Exception('Ürünler yüklenemedi!');
+      // İstek başarılıysa (HTTP 200) veriyi parse et
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        return body.map((dynamic item) => Product.fromJson(item)).toList();
+      } else {
+        throw Exception('API Hatası: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Hata durumunda loglama yapılabilir veya exception fırlatılabilir
+      throw Exception('Veri çekme hatası: $e');
     }
   }
 }

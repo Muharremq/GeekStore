@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
-import '../services/api_service.dart'; // Servis dosyamızı ekledik
+import '../services/api_service.dart';
 import 'detail_screen.dart';
 import 'cart_screen.dart';
 
@@ -12,13 +12,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Verileri tutacak değişken (Gelecek zamanlı veri)
   late Future<List<Product>> futureProducts;
 
   @override
   void initState() {
     super.initState();
-    // Uygulama açılınca verileri çekmeye başla
+    // Ekran yüklendiğinde servis isteğini başlat
     futureProducts = ApiService().fetchProducts();
   }
 
@@ -35,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Premium Teknoloji Mağazası',
+              'Premium Mağaza',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
             ),
           ],
@@ -83,26 +82,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            // FutureBuilder: Veri gelene kadar yükleniyor gösterir, gelince listeyi kurar
+            // Asenkron veri durumunu yöneten builder
             child: FutureBuilder<List<Product>>(
               future: futureProducts,
               builder: (context, snapshot) {
-                // 1. Durum: Veri bekleniyor (Yükleniyor)
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(color: Colors.deepPurple),
                   );
-                }
-                // 2. Durum: Hata oluştu
-                else if (snapshot.hasError) {
-                  return Center(child: Text("Hata oluştu: ${snapshot.error}"));
-                }
-                // 3. Durum: Veri geldi ama boş
-                else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("Ürün bulunamadı"));
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Hata: ${snapshot.error}"));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("Gösterilecek ürün yok."));
                 }
 
-                // 4. Durum: Veri başarıyla geldi
                 final products = snapshot.data!;
 
                 return GridView.builder(
@@ -141,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Ürün Resmi
                             Expanded(
                               child: ClipRRect(
                                 borderRadius: const BorderRadius.vertical(
@@ -149,8 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 child: Image.network(
                                   product.imageUrl,
-                                  fit: BoxFit
-                                      .contain, // Resimlerin tamamı görünsün diye contain yaptık
+                                  fit: BoxFit.contain,
                                   width: double.infinity,
                                 ),
                               ),
@@ -187,22 +178,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    product.description,
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
                                   const SizedBox(height: 12),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Fiyat (USD simgesi ekleyebiliriz ama TL istendiği için ₺ bıraktık)
                                       Text(
                                         "₺${product.price}",
                                         style: const TextStyle(
@@ -219,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ).showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                  "${product.title} sepete eklendi!",
+                                                  "${product.title} sepete eklendi",
                                                 ),
                                                 backgroundColor:
                                                     Colors.deepPurple,
